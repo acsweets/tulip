@@ -7,26 +7,25 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../pages/counter/counter_page.dart';
-import '../pages/empty/empty_page.dart';
-import '../pages/home_page/home_page.dart';
-import '../pages/settings/settings_page.dart';
-import '../pages/user/user_page.dart';
-import 'navigation/transition/fade_transition_page.dart';
+import '../../pages/counter/counter_page.dart';
+import '../../pages/empty/empty_page.dart';
+import '../../pages/home_page/home_page.dart';
+import '../../pages/settings/settings_page.dart';
+import '../../pages/user/user_page.dart';
+import '../navigation/transition/fade_transition_page.dart';
 
 //使用一个路由代理类管理两边的路由《  》（右边为默认路由，但由左边控制 ）
 //通过操控 path 操控pages的页面栈  可以实现路由树解析 传入的节点
-
+//  左边操作右边的数据就行了  ,数据 = 路由内容
 const List<String> kDestinationsPaths = [
   '/user',
   '/counter',
   '/settings',
 ];
 
-AppRouterDelegate router = AppRouterDelegate();
-AppRouterDelegate router2 = AppRouterDelegate();
+AppRouterHostDelegate hostRouter = AppRouterHostDelegate();
 
-class AppRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
+class AppRouterHostDelegate extends RouterDelegate<Object> with ChangeNotifier {
   String _path = '/counter';
 
   String get path => _path;
@@ -48,7 +47,7 @@ class AppRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
     notifyListeners();
   }
 
-  AppRouterDelegate() {
+  AppRouterHostDelegate() {
     // keepAlivePath.add('/color');
   }
 
@@ -59,12 +58,34 @@ class AppRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
     return null;
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Navigator(
       onPopPage: _onPopPage,
-      pages: _buildPageByPath(path),
+      pages: _buildPages(path),
     );
+  }
+
+
+
+  List<Page> _buildPages(path) {
+    List<Page> pages = [];
+    List<Page> topPages = _buildPageByPath(path);
+
+    if (keepAlivePath.isNotEmpty) {
+      for (String alivePath in keepAlivePath) {
+        if (alivePath != path) {
+          pages.addAll(_buildPageByPath(alivePath));
+        }
+      }
+      /// 去除和 topPages 中重复的界面
+      pages.removeWhere(
+              (element) => topPages.map((e) => e.key).contains(element.key));
+    }
+    pages.addAll(topPages);
+    return pages;
   }
 
   List<Page> _buildPageByPath(String path) {

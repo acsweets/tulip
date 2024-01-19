@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../app/app_route_delegate.dart';
+import '../../app/app_route_delegate/app_route_host_delegate.dart';
+import '../../app/app_route_delegate/app_route_order_delegate.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Router(
-        routerDelegate: router,
+        routerDelegate: hostRouter,
         backButtonDispatcher: RootBackButtonDispatcher(),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -23,7 +24,7 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(label: "主页", icon: Icon(Icons.home)),
           BottomNavigationBarItem(label: "设置", icon: Icon(Icons.settings)),
         ],
-        currentIndex: router.activeIndex!,
+        currentIndex: hostRouter.activeIndex!,
         onTap: _onRouterChange,
       ),
     );
@@ -31,9 +32,9 @@ class _HomePageState extends State<HomePage> {
 
   void _onRouterChange(index) {
     if (index == 1) {
-      router.setPathKeepLive(kDestinationsPaths[index]);
+      hostRouter.setPathKeepLive(kDestinationsPaths[index]);
     } else {
-      router.path = kDestinationsPaths[index];
+      hostRouter.path = kDestinationsPaths[index];
     }
     setState(() {});
   }
