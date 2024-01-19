@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../pages/home_page/home_page.dart';
-import '../pages/settings/settings_page.dart';
 import 'app_route_delegate.dart';
-import 'navigation/transition/fade_transition_page.dart';
 
 class UnitApp extends StatelessWidget {
   const UnitApp({super.key});
@@ -23,7 +21,22 @@ class UnitApp extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ))),
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: HomePage()),
+      home: Scaffold(
+          body: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+            router2.path = "${router.path}/counter";
+
+            return Row(children: [
+              const Expanded(child: HomePage()),
+              constraints.maxWidth>414?
+              Expanded(
+                child: Router(
+                  routerDelegate: router2,
+                  backButtonDispatcher: RootBackButtonDispatcher(),
+                ),
+              ):SizedBox(),
+            ],);
+          },
+          )),
     );
   }
 }

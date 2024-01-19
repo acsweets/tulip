@@ -14,37 +14,79 @@ import '../pages/settings/settings_page.dart';
 import '../pages/user/user_page.dart';
 import 'navigation/transition/fade_transition_page.dart';
 
+//使用一个路由代理类管理两边的路由《  》（右边为默认路由，但由左边控制 ）
+//通过操控 path 操控pages的页面栈  可以实现路由树解析 传入的节点
 
 const List<String> kDestinationsPaths = [
-  '/homepage',
-  '/counter',
   '/user',
+  '/counter',
   '/settings',
 ];
 
 AppRouterDelegate router = AppRouterDelegate();
+AppRouterDelegate router2 = AppRouterDelegate();
 
 class AppRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
-  String _path = '/homepage';
+  String _path = '/counter';
 
   String get path => _path;
+
+  // 保持活性
+  final List<String> keepAlivePath = [];
+
+  void setPathKeepLive(String value) {
+    if (keepAlivePath.contains(value)) {
+      keepAlivePath.remove(value);
+    }
+    keepAlivePath.add(value);
+    path = value;
+  }
+
+  set path(String value) {
+    if (_path == value) return;
+    _path = value;
+    notifyListeners();
+  }
 
   AppRouterDelegate() {
     // keepAlivePath.add('/color');
   }
+
   int? get activeIndex {
-    if (path.startsWith('/homepage')) return 0;
+    if (path.startsWith('/user')) return 0;
     if (path.startsWith('/counter')) return 1;
-    if (path.startsWith('/user')) return 2;
-    if (path.startsWith('/settings')) return 3;
+    if (path.startsWith('/settings')) return 2;
     return null;
   }
+
   @override
   Widget build(BuildContext context) {
     return Navigator(
       onPopPage: _onPopPage,
-      pages: const [FadeTransitionPage(child:SettingPage()),FadeTransitionPage(child:CounterPage())],
+      pages: _buildPageByPath(path),
     );
+  }
+
+  List<Page> _buildPageByPath(String path) {
+    Widget? child;
+    // if (path == kDestinationsPaths[0]) {
+    //   child = const ColorPage();
+    // }
+    if (path == kDestinationsPaths[0]) {
+      child = const UserPage();
+    }
+    if (path == kDestinationsPaths[1]) {
+      child = const CounterPage();
+    }
+    if (path == kDestinationsPaths[2]) {
+      child = const SettingPage();
+    }
+    return [
+      FadeTransitionPage(
+        key: ValueKey(path),
+        child: child ?? const EmptyPage(),
+      )
+    ];
   }
 
   @override
@@ -54,12 +96,6 @@ class AppRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
   }
 
   bool _onPopPage(Route route, result) {
-    // if (_completerMap.containsKey(path)) {
-    //   _completerMap[path]?.complete(result);
-    //   _completerMap.remove(path);
-    // }
-    //
-    // path = backPath(path);
     return route.didPop(result);
   }
 
