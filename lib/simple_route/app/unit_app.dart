@@ -33,7 +33,7 @@ class UnitApp extends StatelessWidget {
                         backButtonDispatcher: RootBackButtonDispatcher(),
                       ),
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
             ],
           );
         },
