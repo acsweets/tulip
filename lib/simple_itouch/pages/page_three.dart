@@ -15,6 +15,7 @@ class _PageThreeState extends State<PageThree> {
         title: const Text("PageThree"),
       ),
       body: Container(
+        height: double.infinity,
         color: Colors.amberAccent,
         child: GestureDetector(
             onTap: () {},

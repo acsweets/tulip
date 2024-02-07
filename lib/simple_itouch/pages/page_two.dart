@@ -15,6 +15,7 @@ class _PageTwoState extends State<PageTwo> {
         title: const Text("PageTwo"),
       ),
       body: Container(
+        height: double.infinity,
         color: Colors.red,
         child: GestureDetector(
             onTap: () {},
