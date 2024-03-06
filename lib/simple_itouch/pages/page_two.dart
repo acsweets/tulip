@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tulip/simple_itouch/route/simple_route_delegate.dart';
 
 class PageTwo extends StatefulWidget {
   const PageTwo({Key? key}) : super(key: key);
@@ -18,7 +19,9 @@ class _PageTwoState extends State<PageTwo> {
         height: double.infinity,
         color: Colors.red,
         child: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              rightRoute.setPathForData("/pageTwoDetails", "data");
+            },
             child: const SizedBox(
               height: 10,
               width: double.infinity,

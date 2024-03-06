@@ -3,29 +3,37 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../simple_route/app/navigation/transition/fade_transition_page.dart';
-import '../pages/page_one.dart';
-import '../pages/page_one_details.dart';
-import '../pages/page_three.dart';
-import '../pages/page_two.dart';
+import '../pages/index.dart';
+import '../utils/route.dart';
 
-SimpleRouteDelegate simpleRoute = SimpleRouteDelegate();
+//初始路由是固定的  右边路由退完了回到固定路由
+//点击左边右边路由改变，点击右边左右都改变
 
-const List<String> kDestinationsPaths = ['/pageOne', '/pageTwo', '/pageThree'];
+SimpleRouteDelegate leftRoute = SimpleRouteDelegate("left");
+SimpleRouteDelegate rightRoute = SimpleRouteDelegate("right");
 
 class SimpleRouteDelegate extends RouterDelegate<Object> with ChangeNotifier {
+  final String routing;
+
   //默认的路径，对默认的
-  String _path = '/pageOne';
+  String _path = "";
+
+  SimpleRouteDelegate(this.routing) {
+    if (routing == "left") {
+      _path = '/homePage';
+    } else {
+      _path = '/detailsList';
+    }
+  }
 
   String get path => _path;
 
-  String _childrenPath = '/pageOne/pageOneDetails';
-
-  String get childrenPath => _childrenPath;
-
   void setPathForData(String value, dynamic data) {
-    path = value;
+    path = "/detailsList$value";
     notifyListeners();
   }
+
+  //左边的路由控制右边的路由
 
   ///这个有啥用？
   final Map<String, Completer<dynamic>> _completerMap = {};
@@ -66,35 +74,8 @@ class SimpleRouteDelegate extends RouterDelegate<Object> with ChangeNotifier {
   Widget build(BuildContext context) {
     return Navigator(
       onPopPage: _onPopPage,
-      pages: _buildPageByPath(path),
+      pages: pathBuildPages(path),
     );
-  }
-
-  List<Page> _buildPageByPath(String path) {
-    Widget? child;
-    if (path == kDestinationsPaths[0]) {
-      child = const PageOne();
-    }
-    if (path == kDestinationsPaths[1]) {
-      child = const PageTwo();
-    }
-    if (path == kDestinationsPaths[2]) {
-      child = const PageThree();
-    }
-
-    if (path.startsWith('/pageOne')) {
-      return buildOnePages(path);
-    }
-    return [
-      FadeTransitionPage(
-          // key: ValueKey(path),
-          child: child ??
-              Scaffold(
-                body: Container(
-                  child: Text("页面丢失啦~"),
-                ),
-              ))
-    ];
   }
 
   @override
@@ -125,6 +106,7 @@ class SimpleRouteDelegate extends RouterDelegate<Object> with ChangeNotifier {
       }
       if (segment == 'pageOneDetails') {
         result.add(const FadeTransitionPage(
+          //key相同便不会重建
           key: ValueKey('/pageOne/pageOneDetails'),
           child: PageOneDetails(),
         ));
@@ -132,4 +114,23 @@ class SimpleRouteDelegate extends RouterDelegate<Object> with ChangeNotifier {
     }
     return result;
   }
+}
+
+List<Page> pathBuildPages(String path) {
+  List<Page> result = [];
+  Uri uri = Uri.parse(path);
+  for (String segment in uri.pathSegments) {
+    result.add(FadeTransitionPage(
+      //key相同便不会重建
+      //这么生成key会有问题 如果是使用同一个页面不同物品的详情，没有重建
+      key: ValueKey(segment),
+      child: routes[segment] ?? const EmptyPage(),
+    ));
+  }
+  return result;
+}
+
+main() {
+  String path = "/pageOne/pageOneDetails";
+  pathBuildPages(path);
 }

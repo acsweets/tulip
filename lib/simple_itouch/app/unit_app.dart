@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../pages/home_page.dart';
+import '../pages/index.dart';
 
 
 class UnitApp extends StatelessWidget {
@@ -21,7 +20,7 @@ class UnitApp extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ))),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: const MainPage(),
     );
   }
 }

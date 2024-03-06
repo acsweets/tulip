@@ -20,7 +20,7 @@ class _PageOneState extends State<PageOne> {
         color: Colors.orange,
         child: GestureDetector(
             onTap: () {
-              simpleRoute.setPathForData("/pageOne/pageOneDetails", "data");
+              rightRoute.setPathForData("/pageOneDetails", "data");
             },
             child: const SizedBox(
               height: 10,
