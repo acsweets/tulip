@@ -14,6 +14,16 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(body: LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
+        double width = constraints.maxWidth;
+
+        // 根据屏幕大小执行操作
+        if (width > 414) {
+         leftRoute.trimPathTail(leftRoute.path);
+
+        } else if (rightRoute.path != "/detailsList") {
+         leftRoute.path += rightRoute.path;
+        }
+
         return Row(
           children: [
             Expanded(
@@ -22,6 +32,7 @@ class _MainPageState extends State<MainPage> {
               backButtonDispatcher: RootBackButtonDispatcher(),
             )),
             constraints.maxWidth > 414
+                //折起来的时候如果右path不问空，就把右的路径给左
                 ? Expanded(
                     child: Router(
                       routerDelegate: rightRoute,
