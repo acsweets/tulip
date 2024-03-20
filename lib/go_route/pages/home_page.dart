@@ -24,10 +24,14 @@ class _HomePageState extends State<HomePage> {
           width: double.infinity,
           child: Center(
             child: ElevatedButton(
-              onPressed: () => routerL.go('/goodsPage'),
+              onPressed: () => routerL.go('/details/goodsPage'),
               child: const Text('Go to the Details screen'),
             ),
           ),
         ));
   }
 }
+//页面跳转应该改变两个delegate的 path
+//封装一个公共的跳转 通过 list 去修改两个路由代理类
+//可以魔改？修改go_route来完成跳转
+//数据决定视图
