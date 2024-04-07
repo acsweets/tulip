@@ -26,8 +26,9 @@ final List<RouteBase> routesLeft =  [
 ///比如 /path/:{路径参数}，这个时候 GoRoute的路径参数和很多 Web 框架的路由是一样的
 ///，通过一个英文冒号加参数名称就可以配置，之后我们可以在回调方法中通过 GoRouterState
 ///对象获取路径参数，这个参数就可以传递到路由跳转目的页面
-// 
+//
 
+//
 
 final List<RouteBase> routesRight =  [
   GoRoute(
