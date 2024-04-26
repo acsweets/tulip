@@ -1,7 +1,5 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 
 /// NumberP(
 /// initialValue: 50,
@@ -30,6 +28,7 @@ class NumberP extends StatefulWidget {
   @override
   _NumberPState createState() => _NumberPState();
 }
+
 class _NumberPState extends State<NumberP> {
   late int _selectedValue;
 
@@ -51,7 +50,7 @@ class _NumberPState extends State<NumberP> {
       },
       children: List<Widget>.generate(
         widget.maxValue - widget.minValue + 1,
-            (int index) {
+        (int index) {
           return Center(
             child: Text('${widget.minValue + index}'),
           );
@@ -60,12 +59,9 @@ class _NumberPState extends State<NumberP> {
     );
   }
 }
+
 class CustomCupertinoPicker extends StatelessWidget {
-  final names = [
-    'Java', 'Kotlin', 'Dart',
-    'Swift', 'C++', 'Python',
-    "JavaScript", "PHP", "Go", "Object-c"
-  ];
+  final names = ['Java', 'Kotlin', 'Dart', 'Swift', 'C++', 'Python', "JavaScript", "PHP", "Go", "Object-c"];
 
   CustomCupertinoPicker({super.key});
 

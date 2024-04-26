@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:tulip/main.dart';
+import 'package:tulip/exp/main.dart';
 import 'package:tulip/widget/email_field.dart';
 
 void main() {
