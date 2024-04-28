@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +24,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
@@ -31,48 +31,89 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+  late TabController tabController;
+
+  @override
+  void initState() {
+    tabController = TabController(length: 3, vsync: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [Row(
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            // Expanded(
-            //   child: Swiper(
-            //     itemBuilder: (context, index) {
-            //       return Image.asset(
-            //         images[index],
-            //         fit: BoxFit.fill,
-            //       );
-            //     },
-            //     autoplay: true,
-            //     itemCount: images.length,
-            //     scrollDirection: Axis.vertical,
-            //     pagination: const SwiperPagination(
-            //       alignment: Alignment.centerRight,
-            //       builder: SwiperPagination.rect,
-            //     ),
-            //   ),
-            // )
+            SizedBox(
+              height: 500,
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: SizedBox(
+                      height: 500,
+                      child: Swiper(
+                        autoplay: true,
+                        itemBuilder: (context, index) {
+                          return Image.network(
+                            "https://marketplace.canva.cn/NsFNI/MADwRLNsFNI/1/screen_2x/canva-blue-textured-background-MADwRLNsFNI.jpg",
+                            fit: BoxFit.fill,
+                          );
+                        },
+                        itemCount: 3,
+                        pagination: const SwiperPagination(),
+                        control: const SwiperControl(),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 50,
+                    right: 200,
+                    child: GestureDetector(
+                      onTap: () async {
+                        Uri url = Uri.https('juejin.cn','/user/1834404269803310',);
+                        if (await canLaunchUrl(url)) {
+                        await launchUrl(url);
+                        } else {
+                        throw 'Could not launch $url';
+                        }
+                      },
+                      child: Container(
+                        height: 20,
+                        width: 50,
+                        color: Colors.cyan,
+                        child: Text(" 我的掘金"),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            TabBar(
+                controller: tabController,
+                tabs: List.generate(
+                    3,
+                    (index) => Container(
+                          child: Text("我的文章"),
+                        ))),
+            SizedBox(
+              height: 200,
+              child: TabBarView(controller: tabController, children: [
+                Container(
+                  color: Colors.grey,
+                ),
+                Container(
+                  color: Colors.red,
+                ),
+                Container(
+                  color: Colors.blue,
+                ),
+              ]),
+            )
           ],
         ),
-          SizedBox(
-            height: 500,
-            child: Swiper(
-
-                autoplay: true,
-              itemBuilder: (context, index){
-                return Image.network( "https://marketplace.canva.cn/NsFNI/MADwRLNsFNI/1/screen_2x/canva-blue-textured-background-MADwRLNsFNI.jpg",fit: BoxFit.fill,);
-              },
-              itemCount: 3,
-              pagination: const SwiperPagination(),
-              control: const SwiperControl(),
-            ),
-          ),
-
-        ],
-
       ),
     );
   }
