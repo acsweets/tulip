@@ -40,6 +40,8 @@ dependencies:
   bot_toast: ^4.1.3
   flutter_swiper_view: ^1.1.8
   url_launcher: ^6.0.3
+  graphic: ^2.2.1 # 图表库
+  quiver: ^3.2.1 # 升级了dart的库
 dev_dependencies:
   flutter_test:
     sdk: flutter
