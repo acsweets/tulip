@@ -1,5 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'dart:ui';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:tulip/exp/pages/custom_single.dart';
+import 'package:tulip/exp/pages/layout.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,14 +18,28 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      builder: BotToastInit(),
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+        title: 'Flutter Demo',
+        builder: BotToastInit(),
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: Scaffold(
+          // body: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+          //   print(constraints);
+          //   return  LayoutPage( constraints: constraints);
+          // },
+          // ),
+
+          body:Center(
+            child:Container(
+              width:200,
+              height: 200,
+              color: const Color(0xff24B718),
+              child: CustomSingle(),
+            ),
+          )
+        ));
   }
 }
 
@@ -87,7 +107,8 @@ class _MyHomePageState extends State<MyHomePage> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                BotToast.showText(text: "11111");
+                // BotToast.showText(text: "11111");
+                Navigator.pop(context);
                 // Navigator.pop(context);
               },
             ),
@@ -95,5 +116,21 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+  }
+
+// PictureRecorder->Canvas->Picture 这套组合拳。
+  void createCanvas() async {
+    PictureRecorder recorder = PictureRecorder();
+    Canvas canvas = Canvas(recorder);
+    Size boxSize = const Size(100, 100);
+    canvas.drawRect(Offset.zero & boxSize, Paint()..color = Colors.blue);
+    Picture picture = recorder.endRecording();
+    ui.Image image = await picture.toImage(boxSize.width.toInt(), boxSize.height.toInt());
+    // 获取字节，存入文件
+    ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
+    if (byteData != null) {
+      File file = File(r"E:\Temp\desk\box.png");
+      file.writeAsBytes(byteData.buffer.asUint8List());
+    }
   }
 }

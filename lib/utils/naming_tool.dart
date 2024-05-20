@@ -11,7 +11,7 @@ const List<String> projectNames = [
   // "wisteria", //紫藤
   " tree peony", //牡丹
   "peony", //芍药
-  " common camellia", //茶花
+  "camellia", //茶花
   " cape jasmine", //栀子花
   "cockscomb", //鸡冠花；
   "honeysuckle", //金银花；
